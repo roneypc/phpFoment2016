@@ -6,7 +6,11 @@
 
 <?php
 // define variables and set to empty values
+$nameErr = $lastnameErr = $emailErr = $genderErr = "";
+// define variables and set to empty values
 $name = $lastname = $email = $gender = "";
+
+$msg = "< ? =   es igual a   < ? php  echo";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $name = test_input($_POST["name"]);
@@ -32,6 +36,8 @@ echo "<br>";
 echo "Correo: $email";
 echo "<br>";
 echo "Género: $gender";
+echo "<br>HTML: $msg";
+
 ?>
 
 </body>
