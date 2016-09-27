@@ -97,15 +97,19 @@ class Usuario extends DBAbstractModel {
 	 * @see DBAbstractModel::delete()
 	 */
 	public function delete($user_email = '') {
-		$this->get ( $user_data ['email'] );
-		if ($user_email == $this->email) {
-			$this->query = "
-			DELETE FROM usuarios
-			WHERE email = '$user_email'
-			";
-			$this->execute_single_query ();
+		if (! empty ( $user_email )) {
+			$this->get ( $user_data ['email'] );
+			if ($user_email == $this->email) {
+				$this->query = "
+				DELETE FROM usuarios
+				WHERE email = '$user_email'
+				";
+				$this->execute_single_query ();
+			} else {
+				echo 'El email solicitado para eliminar no existe';
+			}
 		} else {
-			echo 'El email solicitado para eliminar no existe';
+			echo 'No ha informado el email';
 		}
 	}
 
