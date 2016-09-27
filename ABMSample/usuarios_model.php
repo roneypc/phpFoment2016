@@ -21,7 +21,7 @@ class Usuario extends DBAbstractModel {
 	 * @see DBAbstractModel::get()
 	 */
 	public function get($user_email = '') {
-		if ($user_email != '') {
+		if (! empty ( $user_email )) {
 			$this->query = "
 				SELECT id, nombre, apellido, email, clave
 				FROM usuarios
@@ -50,7 +50,6 @@ class Usuario extends DBAbstractModel {
 				foreach ( $user_data as $campo => $valor ) {
 					$$campo = $valor;
 				}
-				;
 				$this->query = "
 					INSERT INTO usuarios
 					(nombre, apellido, email, clave)
@@ -98,7 +97,7 @@ class Usuario extends DBAbstractModel {
 	 */
 	public function delete($user_email = '') {
 		if (! empty ( $user_email )) {
-			$this->get ( $user_data ['email'] );
+			$this->get ( $user_email );
 			if ($user_email == $this->email) {
 				$this->query = "
 				DELETE FROM usuarios
