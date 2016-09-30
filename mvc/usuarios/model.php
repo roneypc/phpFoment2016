@@ -14,8 +14,23 @@ class model extends DBAbstractModel {
 	public $email;
 	private $clave;
 	protected $id;
+
+	/**
+	 * Método constructor
+	 */
+	function __construct() {
+		$this->db_name = 'book_example';
+	}
+
 	// ################################ MÉTODOS ##################################
-	// Traer datos de un usuario
+
+	/**
+	 * Traer datos de un usuario
+	 *
+	 * {@inheritdoc}
+	 *
+	 * @see DBAbstractModel::get()
+	 */
 	public function get($user_email = '') {
 		if ($user_email != '') {
 			$this->query = "
@@ -34,7 +49,24 @@ class model extends DBAbstractModel {
 			$this->mensaje = 'model no encontrado';
 		}
 	}
-	// Crear un nuevo usuario
+
+	/**
+	 * Retorna todos los usuarios
+	 */
+	public function getAll() {
+		$this->query = "
+			SELECT id, nombre, apellido, email, clave
+			FROM usuarios";
+		$this->get_results_from_query ();
+	}
+
+	/**
+	 * Crear un nuevo usuario
+	 *
+	 * {@inheritdoc}
+	 *
+	 * @see DBAbstractModel::set()
+	 */
 	public function set($user_data = array()) {
 		if (array_key_exists ( 'email', $user_data )) {
 			$this->get ( $user_data ['email'] );
@@ -57,7 +89,10 @@ class model extends DBAbstractModel {
 			$this->mensaje = 'No se ha agregado al usuario';
 		}
 	}
-	// Modificar un usuario
+
+	/**
+	 * Modificar un usuario
+	 */
 	public function edit($user_data = array()) {
 		foreach ( $user_data as $campo => $valor ) {
 			$$campo = $valor;
@@ -71,7 +106,14 @@ class model extends DBAbstractModel {
 		$this->execute_single_query ();
 		$this->mensaje = 'model modificado';
 	}
-	// Eliminar un usuario
+
+	/**
+	 * Eliminar un usuario
+	 *
+	 * {@inheritdoc}
+	 *
+	 * @see DBAbstractModel::delete()
+	 */
 	public function delete($user_email = '') {
 		$this->query = "
 	DELETE FROM usuarios
@@ -80,11 +122,16 @@ class model extends DBAbstractModel {
 		$this->execute_single_query ();
 		$this->mensaje = 'model eliminado';
 	}
-	// Método constructor
-	function __construct() {
-		$this->db_name = 'book_example';
+
+	/**
+	 */
+	public function getRows() {
+		return $this->rows;
 	}
-	// Método destructor del objeto
+
+	/**
+	 * Método destructor del objeto
+	 */
 	function __destruct() {
 		unset ( $this );
 	}

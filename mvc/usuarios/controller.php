@@ -11,12 +11,14 @@ function handler() {
 	$peticiones = array (
 			SET_USER,
 			GET_USER,
+			GET_ALL,
 			DELETE_USER,
 			EDIT_USER,
 			VIEW_SET_USER,
 			VIEW_GET_USER,
 			VIEW_DELETE_USER,
-			VIEW_EDIT_USER
+			VIEW_EDIT_USER,
+			VIEW_GET_ALL
 	);
 	foreach ( $peticiones as $peticion ) {
 		$uri_peticion = MODULO . $peticion . '/';
@@ -42,6 +44,10 @@ function handler() {
 					'email' => $usuario->email
 			);
 			retornar_vista ( VIEW_EDIT_USER, $data );
+			break;
+		case GET_ALL :
+			$usuario->get ( $user_data );
+			retornar_vista ( VIEW_GET_ALL, $usuario->getRows () );
 			break;
 		case DELETE_USER :
 			$usuario->delete ( $user_data ['email'] );
