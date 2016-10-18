@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;MVCDemo/view.tpl&apos; to &apos;view.html&apos;" description="Rename resource &apos;view.tpl&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="view.tpl" name="view.html" stamp="1475081788676" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;MVCDemo/view.html&apos; to &apos;view.tpl&apos;" description="Rename resource &apos;view.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="view.html" name="view.tpl" stamp="1475081804319" updateReferences="true"/>
+</session>

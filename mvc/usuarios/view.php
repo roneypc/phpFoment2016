@@ -59,7 +59,21 @@ function retornar_vista($vista, $data = array()) {
 	$html = str_replace ( '{formulario}', get_template ( $vista ), $html );
 	$html = render_dinamic_data ( $html, $diccionario ['form_actions'] );
 	$html = render_dinamic_data ( $html, $diccionario ['links_menu'] );
-	$html = render_dinamic_data ( $html, $data );
+
+	// Si la vista es LISTAR iterara el array de resultados
+	if ($vista == 'listar') {
+		print_r ( $data );
+		for($i = 0; $i < count ( $data ); $i ++) {
+			foreach ( $data [$i] as $key => $value ) {
+				$listado .= ucfirst ( $key ) . ": " . $value . "<br>";
+			}
+			$listado .= "<br>";
+		}
+		$html = str_replace ( '{LISTADO}', $listado, $html );
+	} else {
+		$html = render_dinamic_data ( $html, $data );
+	}
+
 	// render {mensaje}
 	if (array_key_exists ( 'nombre', $data ) && array_key_exists ( 'apellido', $data ) && $vista == VIEW_EDIT_USER) {
 		$mensaje = 'Editar usuario ' . $data ['nombre'] . ' ' . $data ['apellido'];

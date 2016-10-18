@@ -114,6 +114,12 @@ class Usuario extends DBAbstractModel {
 
 	/**
 	 */
+	public function getRows() {
+		return $this->rows;
+	}
+
+	/**
+	 */
 	function __destruct() {
 		unset ( $this );
 	}
