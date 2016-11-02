@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:pm="http://www.getpostman.com/">
+ <soapenv:Header></soapenv:Header>
+ <soapenv:Body>
+ <pm:bye>
+ .
+ .
+ .
+ </pm:bye>
+ </soapenv:Body>
+</soapenv:Envelope>
