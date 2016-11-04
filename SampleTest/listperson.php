@@ -35,11 +35,11 @@
 		$birthdate = $_POST["birthdate"];
 		$city = $_POST["city"];
 
-		if(isset($_POST["id"])) {
-			updateData($_POST["id"]), $name, $lastname, $birthdate, $city);
-		} else {
+		//if(isset($_POST["id"])) {
+		//	updateData($_POST["id"]), $name, $lastname, $birthdate, $city);
+		//} else {
 			insertData($name, $lastname, $birthdate, $city);
-		}
+		//}
 	}
 
 	if(isset($_POST["id_to_delete"])) {
