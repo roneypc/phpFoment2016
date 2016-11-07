@@ -10,12 +10,20 @@
 	</style>
 
 	<script type="text/javascript">
+
+	// Pregunta si desea borrar a la persona
 	function ask_delete(id, name, lastname) {
+		// Guarda el id a borrar en el formulario oculto
 		document.getElementById('id_to_delete').value = id;
+
+		// Modifica el título de la ventana de confirmación
 		document.getElementById('delete_title').innerHTML = "Eliminar a la persona " + name + " " + lastname;
+		
+		// Muestra la ventana de confirmación
 		document.getElementById('id01').style.display='block';
 	}
 
+	// Recupera los datos de la persona y los pone en el formulario
 	function prepare_to_edit(id, name, lastname, birthdate, city) {
 		document.getElementById('id').value = id;
 		document.getElementById('name').value = name;
@@ -29,22 +37,31 @@
 <body>
 
 <?php 
-	// if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["birthdate"]) && isset($_POST["city"])) {
+	// Comprueba si se han recibido todos los datos de la persona
 	if(!IsNullOrEmpty($_POST["name"]) && !IsNullOrEmpty($_POST["lastname"]) && !IsNullOrEmpty($_POST["birthdate"]) && !IsNullOrEmpty($_POST["city"])) {
+		// Si se han recibido, los almacena en sus respectivas variables
 		$name = $_POST["name"];
 		$lastname = $_POST["lastname"];
 		$birthdate = $_POST["birthdate"];
 		$city = $_POST["city"];
 
+		// Si se ha recibido un ID ==>> la persona ya existe
 		if(!IsNullOrEmpty($_POST["id"])) {
+			// actualizar los datos de la persona
 			updateData($_POST["id"], $name, $lastname, $birthdate, $city);
-		} else {
+		} 
+		// Si no se ha recibido un ID ==>> la persona no existe
+		else {
+			// insertar una nueva persona
 			insertData($name, $lastname, $birthdate, $city);
 		}
 	}
 
+	// Si se ha recibido un ID para eliminar..
 	if(!IsNullOrEmpty($_POST["id_to_delete"])) {
+		// Recuperar el ID para eliminar
 		$id = $_POST["id_to_delete"];
+		// eliminar la persona
 		deleteData($_POST["id_to_delete"]);
 	}
 ?>
@@ -106,10 +123,17 @@ Se ha creado un nuevo registro
 
 <?php
 
+/*
+* Recupera los datos de la BBDD y construye
+* la tabla
+*/
 function getTableWithData() {
+	// Obtiene la conexión a la BBDD
 	$conn = getDBConnection();
 
+	// Contruye la consulta
 	$sql = "SELECT id_person, name, lastname, birthdate, city FROM person order by id_person desc";
+	// Ejecuta la consulta
 	$result = $conn->query($sql);
 
 	$html = "0 results";
@@ -121,7 +145,7 @@ function getTableWithData() {
 		$html .= "<th>Fecha Nac.</th>";
 		$html .= "<th>Ciudad</th>";
 		$html .= "<th>Acción</th></tr>";
-	    // output data of each row
+	    // Recorre todos los registros
 	    while($row = $result->fetch_assoc()) {
 	    	$html .= "<tr><td>" . $row["id_person"] . "</td>";
 	    	$html .= "<td>" . $row["name"] . "</td>";
@@ -138,6 +162,9 @@ function getTableWithData() {
 	return $html;
 }
 
+/*
+* Inserta un nuevo registro en BBDD
+*/
 function insertData($name, $lastname, $birthdate, $city) {
 	$conn = getDBConnection();
 
@@ -153,6 +180,9 @@ function insertData($name, $lastname, $birthdate, $city) {
 	$conn->close();
 }
 
+/*
+* Actualizar un registro de BBDD
+*/
 function updateData($id, $name, $lastname, $birthdate, $city) {
 	$conn = getDBConnection();
 
@@ -167,6 +197,9 @@ function updateData($id, $name, $lastname, $birthdate, $city) {
 	$conn->close();	
 }
 
+/*
+* Eliminar un registro de BBDD
+*/
 function deleteData($id) {
 	$conn = getDBConnection();
 
@@ -182,21 +215,27 @@ function deleteData($id) {
 	$conn->close();
 }
 
+/*
+* 
+*/
 function getDBConnection() {
 	$servername = "localhost";
 	$username = "root";
 	$password = "";
 	$dbname = "db_sample_test";
 
-	// Create connection
+	// Crear la conexión
 	$conn = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
+	// Comprobar la conexión
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 	return $conn;
 }
 
+/*
+* 
+*/
 function IsNullOrEmpty($str){
     return (!isset($str) || trim($str)==='');
 }
