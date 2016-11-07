@@ -29,20 +29,21 @@
 <body>
 
 <?php 
-	if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["birthdate"]) && isset($_POST["city"])) {
+	// if(isset($_POST["name"]) && isset($_POST["lastname"]) && isset($_POST["birthdate"]) && isset($_POST["city"])) {
+	if(!IsNullOrEmpty($_POST["name"]) && !IsNullOrEmpty($_POST["lastname"]) && !IsNullOrEmpty($_POST["birthdate"]) && !IsNullOrEmpty($_POST["city"])) {
 		$name = $_POST["name"];
 		$lastname = $_POST["lastname"];
 		$birthdate = $_POST["birthdate"];
 		$city = $_POST["city"];
 
-		//if(isset($_POST["id"])) {
-		//	updateData($_POST["id"]), $name, $lastname, $birthdate, $city);
-		//} else {
+		if(!IsNullOrEmpty($_POST["id"])) {
+			updateData($_POST["id"], $name, $lastname, $birthdate, $city);
+		} else {
 			insertData($name, $lastname, $birthdate, $city);
-		//}
+		}
 	}
 
-	if(isset($_POST["id_to_delete"])) {
+	if(!IsNullOrEmpty($_POST["id_to_delete"])) {
 		$id = $_POST["id_to_delete"];
 		deleteData($_POST["id_to_delete"]);
 	}
@@ -131,7 +132,6 @@ function getTableWithData() {
 
 	    	$html .= "<img onclick=\"javascript:ask_delete('" . $row["id_person"] . "', '" . $row["name"] . "', '" . $row["lastname"] . "');\" src='delete.png' height='32' width='32'/></td></tr>";
 	    }
-	    $html .= "</table>";
 	} 
 	$conn->close();
 
@@ -156,8 +156,7 @@ function insertData($name, $lastname, $birthdate, $city) {
 function updateData($id, $name, $lastname, $birthdate, $city) {
 	$conn = getDBConnection();
 
-	$sql = "UPDATE person set (name, lastname, birthdate, city)
-	VALUES ('" .$name . "', '" . $lastname . "', '" . $birthdate . "', '" . $city . "') WHERE id_person = " . $id;
+	$sql = "UPDATE person set name='" . $name . "', lastname='" . $lastname . "', birthdate='" . $birthdate . "', city='" . $city . "' WHERE id_person = " . $id;
 
 	if ($conn->query($sql) === TRUE) {
 	    //echo "New record created successfully";
@@ -196,6 +195,10 @@ function getDBConnection() {
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 	return $conn;
+}
+
+function IsNullOrEmpty($str){
+    return (!isset($str) || trim($str)==='');
 }
 ?>
 
