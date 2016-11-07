@@ -37,9 +37,6 @@
 <body>
 
 <?php 
-
-	$messages = " ";
-
 	// Comprueba si se han recibido todos los datos de la persona
 	if(!IsNullOrEmpty($_POST["name"]) && !IsNullOrEmpty($_POST["lastname"]) && !IsNullOrEmpty($_POST["birthdate"]) && !IsNullOrEmpty($_POST["city"])) {
 		// Si se han recibido, los almacena en sus respectivas variables
@@ -52,13 +49,11 @@
 		if(!IsNullOrEmpty($_POST["id"])) {
 			// actualizar los datos de la persona
 			updateData($_POST["id"], $name, $lastname, $birthdate, $city);
-			$messages = "Se ha actualizado a una persona";
 		} 
 		// Si no se ha recibido un ID ==>> la persona no existe
 		else {
 			// insertar una nueva persona
 			insertData($name, $lastname, $birthdate, $city);
-			$messages = "Se ha agregado una nueva persona";
 		}
 	}
 
@@ -68,7 +63,6 @@
 		$id = $_POST["id_to_delete"];
 		// eliminar la persona
 		deleteData($_POST["id_to_delete"]);
-		$messages = "Se ha eliminado a una persona";
 	}
 ?>
 
@@ -123,7 +117,34 @@
 </div>
 
 <div class="w3-container w3-responsive">
-<?php echo $messages; ?>
+<?php echo $messages; 
+	// Obtiene la conexión a la BBDD
+	$conn = getDBConnection();
+
+	// Contruye la consulta
+	$sql = "SELECT id_person, name, lastname, birthdate, city FROM person order by id_person desc";
+	// Ejecuta la consulta
+	$result = $conn->query($sql); 
+	if ($result->num_rows > 0) : ?>
+		<table class='w3-table-all'>
+		<tr><th>ID</th>
+		<th>Nombre</th>
+		<th>Apellido</th>
+		<th>Fecha Nac.</th>
+		<th>Ciudad</th>
+		<th>Acción</th></tr>
+		<?php while($row = $result->fetch_assoc()) : ?>		
+	    	<tr><td><?= $row["id_person"] ?></td>
+			<tr><td><?= $row["name"] ?></td>
+			<tr><td><?= $row["lastname"] ?></td>
+			<tr><td><?= $row["birthdate"] ?></td>
+			<tr><td><?= $row["city"] ?></td>
+			<td><img onclick="javascript:prepare_to_edit('<?= $row["id_person"] ?>', '<?= $row["name"] ?>', '<?= $row["lastname"] ?>', '<?= $row["birthdate"] ?>', '<?= $row["city"] ?>');" src="edit.png" height="32" width="32" title="Editar"/>
+
+	    	<img onclick="javascript:ask_delete('$row["id_person"]', '$row["name"]', '$row["lastname"]');" src="delete.png" height='32' width='32' title='Eliminar'/></td></tr>
+	
+	
+	
 <?php echo getTableWithData(); ?>
 </div>
 
@@ -134,33 +155,10 @@
 * la tabla
 */
 function getTableWithData() {
-	// Obtiene la conexión a la BBDD
-	$conn = getDBConnection();
-
-	// Contruye la consulta
-	$sql = "SELECT id_person, name, lastname, birthdate, city FROM person order by id_person desc";
-	// Ejecuta la consulta
-	$result = $conn->query($sql);
 
 	$html = "0 results";
-	if ($result->num_rows > 0) {
-		$html = "<table class='w3-table-all'>";
-		$html .= "<tr><th>ID</th>";
-		$html .= "<th>Nombre</th>";
-		$html .= "<th>Apellido</th>";
-		$html .= "<th>Fecha Nac.</th>";
-		$html .= "<th>Ciudad</th>";
-		$html .= "<th>Acción</th></tr>";
-	    // Recorre todos los registros
-	    while($row = $result->fetch_assoc()) {
-	    	$html .= "<tr><td>" . $row["id_person"] . "</td>";
-	    	$html .= "<td>" . $row["name"] . "</td>";
-	    	$html .= "<td>" . $row["lastname"]."</td>";
-	    	$html .= "<td>" . $row["birthdate"]."</td>";
-	    	$html .= "<td>" . $row["city"]."</td>";
-	    	$html .= "<td><img onclick=\"javascript:prepare_to_edit('" . $row["id_person"] . "', '" . $row["name"] . "', '" . $row["lastname"] . "', '" . $row["birthdate"] . "', '" . $row["city"] . "');\" src='edit.png' height='32' width='32' title='Editar'/>";
 
-	    	$html .= "<img onclick=\"javascript:ask_delete('" . $row["id_person"] . "', '" . $row["name"] . "', '" . $row["lastname"] . "');\" src='delete.png' height='32' width='32' title='Eliminar'/></td></tr>";
+	// Recorre todos los registros
 	    }
 	}
 	$conn->close();
